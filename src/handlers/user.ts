@@ -16,5 +16,7 @@ export class UserHandler {
   createUser = (
     request: Request<{}, {}, CreateUserDto>,
     response: Response
-  ) => {};
+  ) => {
+    
+  };
 }

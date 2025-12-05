@@ -1,11 +1,14 @@
 import express from 'express';
 import router from './routes/user';
+import { PORT } from './defaults';
+import bodyParser from 'body-parser';
 
 const app = express();
 
-app.use('/api/users', router)
+app.use(bodyParser.json());
+app.use(express.json());
 
-const PORT = 3000;
+app.use('/api/users', router)
 
 app.listen(PORT, () => {
     console.log(`Running on Port ${PORT}`);
