@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { createUser, getUsers, getUsersById } from "../handlers/user";
+import { UserHandler } from "../handlers/user";
 
-const userRouter = Router();
+const router = Router();
 
-userRouter.get('/', getUsers);
-userRouter.get('/:id',getUsersById);
+const userHandler = new UserHandler();
 
-userRouter.post('/',createUser)
+router.get("/", userHandler.getUsers);
+router.get("/:id", userHandler.getUsersById);
 
+router.post("/", userHandler.createUser);
 
-export {userRouter}
+export default router;

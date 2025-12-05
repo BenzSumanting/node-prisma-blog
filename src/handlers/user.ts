@@ -1,13 +1,17 @@
 import { Request, Response } from "express";
+import { CreateUserDto } from "../dtos/CreateUser.dto";
 
-export function getUsers(request: Request, response: Response) {
-  response.send([]);
-}
+export class UserHandler {
+  getUsers = (request: Request, response: Response) => {
+    response.send([]);
+  };
 
-export function getUsersById(request: Request, response: Response) {
-  response.send({success:true,data:{name:"benz",age:30}});
-}
+  getUsersById = (request: Request, response: Response) => {
+    response.send({ success: true, data: { name: "benz", age: 30 } });
+  };
 
-export function createUser(request:Request, response: Response){
-    
+  createUser = (
+    request: Request<{}, {}, CreateUserDto>,
+    response: Response
+  ) => {};
 }
