@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { CreateUserDto } from "../dtos/CreateUser.dto";
 import prisma from "../lib/prisma";
 import { User } from "../generated/prisma/client";
 import bcrypt from "bcrypt";
+import { BadRequestsException } from "../exceptions/base.error";
 
 export class UserHandler {
   getUsers = async (request: Request, response: Response) => {
@@ -14,7 +15,11 @@ export class UserHandler {
     response.send({ success: true, data: { name: "benz", age: 30 } });
   };
 
-  createUser = async (req: Request<{}, {}, CreateUserDto>, res: Response) => {
+  createUser = async (
+    req: Request<{}, {}, CreateUserDto>,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       let salt = 10;
 
@@ -34,10 +39,10 @@ export class UserHandler {
         data: user,
       });
     } catch (error: any) {
-      res.status(400).json({
-        message: "Failed to create user",
-        error: error.message,
-      });
+      // res.status(400).json({
+      //   message: "Failed to create user",
+      //   error: error.message,q
+      // });
     }
   };
 }
