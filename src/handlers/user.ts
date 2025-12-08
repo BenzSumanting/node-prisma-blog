@@ -34,10 +34,12 @@ export class UserHandler {
         },
       });
 
-      res.status(201).json({
-        success: true,
-        data: user,
-      });
+      res.status(201).json(user);
+
+      // res.status(201).json({
+      //   success: true,
+      //   data: user,
+      // });
     } catch (error: any) {
       // res.status(400).json({
       //   message: "Failed to create user",
