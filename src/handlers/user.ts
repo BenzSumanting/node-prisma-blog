@@ -4,6 +4,7 @@ import prisma from "../lib/prisma";
 import { User } from "../generated/prisma/client";
 import bcrypt from "bcrypt";
 import { BadRequestsException } from "../exceptions/base.error";
+import { UserResource } from "../resources/user.resource";
 
 export class UserHandler {
   getUsers = async (request: Request, response: Response) => {
@@ -34,7 +35,7 @@ export class UserHandler {
         },
       });
 
-      res.status(201).json(user);
+      res.status(201).json(new UserResource(user).toJSON());
 
       // res.status(201).json({
       //   success: true,
