@@ -1,19 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import { CreateUserDto } from "../dtos/CreateUser.dto";
-import prisma from "../lib/prisma";
-import { User } from "../generated/prisma/client";
-import bcrypt from "bcrypt";
-import { BadRequestsException } from "../exceptions/base.error";
-import { UserResource } from "../resources/user.resource";
+import { UserService } from "../services/user.service";
 
 export class UserHandler {
-  getUsers = async (request: Request, response: Response) => {
-    const users = await prisma.user.findMany();
-    response.status(200).json({ success: "true", data: users });
+  private userService = new UserService();
+  getUsers = async (req: Request, res: Response) => {
+    const users = await this.userService.getUsers();
+    return res.status(200).json({ success: "true", data: users });
   };
 
-  getUsersById = (request: Request, response: Response) => {
-    response.send({ success: true, data: { name: "benz", age: 30 } });
+  getUsersById = async (req: Request, res: Response) => {
+    const id = req.params.id;
+
+    const user = await this.userService.getUserById(Number(id));
+
+    return res.status(200).json({ success: "true", data: user });
   };
 
   createUser = async (
@@ -22,30 +23,11 @@ export class UserHandler {
     next: NextFunction
   ) => {
     try {
-      let salt = 10;
+      const user = await this.userService.createUser(req.body);
 
-      const { password, ...other } = req.body;
-
-      const hashed = await bcrypt.hash(password, salt);
-
-      const user = await prisma.user.create({
-        data: {
-          ...other,
-          password: hashed,
-        },
-      });
-
-      res.status(201).json(new UserResource(user).toJSON());
-
-      // res.status(201).json({
-      //   success: true,
-      //   data: user,
-      // });
+      res.status(200).json(user);
     } catch (error: any) {
-      // res.status(400).json({
-      //   message: "Failed to create user",
-      //   error: error.message,q
-      // });
+      next(error);
     }
   };
 }
